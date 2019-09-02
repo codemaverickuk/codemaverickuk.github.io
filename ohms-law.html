@@ -1,0 +1,468 @@
+﻿<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="x-ua-compatible" content="IE=edge">
+	<title>Ohm's Law</title>
+	<link rel="stylesheet" href="./css/ohms-law.css">	
+</head>
+<body>
+
+	<h4>Ohm's Law</h4>
+	<div id="ohmsLawSection" class="section">
+		<span><span class="symbol">V</span>&nbsp;</span><input id="iVirV" type="number" value="5" />
+		<span> = <span class="symbol">I</span> (mA) </span><input id="iVirI" type="number" />
+		<span> x <span class="symbol">R</span> </span><input id="iVirR" type="number" />
+		<a id="lCopyToRl" href="#">Copy to RL</a>
+	</div>
+
+	<h4>Encode Resistor Value</h4>
+	<div id="resistorSection" class="section">
+		<div id="iBandContainer" class="row">
+			<select id="iResistorBand1"></select>
+			<select id="iResistorBand2"></select>
+			<select id="iResistorBand3"></select>
+		</div>
+		<div class="row">
+			<div id="resistorValuesContainer">
+				<input id="iResistorValue" type="number" min="0" max="999" />
+				<select id="iResistorUnits">
+					<option value="1">R</option>
+					<option value="1000">K</option>
+					<option value="1000000">M</option>
+				</select>
+			</div>
+			<div id="resistorContainer">
+				<div id="wireLeft"></div>
+				<div id="resistorBodyLeft"></div>
+				<div id="resistorBody">
+					<div id="resistorBand1" class="resistorBand"></div>
+					<div id="resistorBand2" class="resistorBand"></div>
+					<div id="resistorBand3" class="resistorBand"></div>
+					<div id="resistorBand4" class="resistorBand"></div>
+				</div>
+				<div id="resistorBodyRight"></div>
+				<div id="wireRight"></div>
+				<span id="ohms">0</span><span>&Omega; &#177;10%</span>
+			</div>
+		</div>
+	</div>
+
+	<h4>Calculate Base Resistor for Transistor</h4>
+	<div id="hfeSection" class="section">
+		<a id="lEncodeRb" href="#">RB</a>&nbsp;<input id="iHfeRb" type="number" />
+			<span> = 0.2 x <a id="lEncodeRl" href="#">RL</a>&nbsp;</span><input id="iHfeRl" type="number" />
+			<span> x hFE (min) </span><input id="iHfe" type="number" value="100" />
+	</div>
+
+	<h4>Voltage Divider</h4>
+	<div id="voltageDividerSection" class="section circuit">
+		<div id="vdRow1" class="row">
+			<div class="leftAngle"></div>
+			<input id="iVdR1" type="number" value="1000" />
+			<div class="rightAngle"></div>
+			<div class="topLine"></div>
+			<input id="iVdR2" type="number" value="2000" />
+			<div class="rightAngle"></div>
+		</div>
+		<div id="vdRow2" class="row">
+			<div class="leftLine"></div>
+			<div id="vdR1Label" class="circuit-label"><a href="#" id="lEncodeVdR1"><span>R1</span></a></div>
+			<div id="vdRow2RightLine1" class="rightLine"></div>
+			<div id="vdR2Label" class="circuit-label"><a href="#" id="lEncodeVdR2"><span>R2</span></a></div>
+			<div id="vdRow2RightLine2" class="rightLine"></div>
+			</div>
+		<div id="vdRow3" class="row">
+			<input id="iVdIn" type="number" value="5" />
+			<input id="iVdOut" type="number" value="0" />
+			<div id="vdRow3RightLine1" class="rightLine"></div>
+		</div>
+		<div id="vdRow4" class="row">
+			<div id="vdVinLabel" class="circuit-label"><span class="symbol">V</span><span>in</span></div>
+			<div id="vdVoutLabel" class="circuit-label"><span id="vdVoutSpan"><span class="symbol">V</span><span>out</span></span></div>
+			<div id="vdGround" class="ground"><div class="ground1"></div><div class="ground2"></div></div>
+		</div>
+	</div>
+
+		<script type="text/javascript">
+			(function ()
+			{
+				var resistorBand1 = document.getElementById("resistorBand1");
+				var resistorBand2 = document.getElementById("resistorBand2");
+				var resistorBand3 = document.getElementById("resistorBand3");
+
+				var iResistorBand1 = document.getElementById("iResistorBand1");
+				var iResistorBand2 = document.getElementById("iResistorBand2");
+				var iResistorBand3 = document.getElementById("iResistorBand3");
+
+				var iResistorValue = document.getElementById("iResistorValue");
+				var iResistorUnits = document.getElementById("iResistorUnits");
+
+				var iHfeRb = document.getElementById("iHfeRb");
+				var iHfeRl = document.getElementById("iHfeRl");
+				var iHfe = document.getElementById("iHfe");
+
+				var lEncodeRb = document.getElementById("lEncodeRb");
+				var lEncodeRl = document.getElementById("lEncodeRl");
+				var lCopyToRl = document.getElementById("lCopyToRl");
+
+				var colourNames = ["Black", "Brown", "Red", "Orange", "Yellow", "Green", "Blue", "Violet", "Gray", "White"];
+
+				var iVirV = document.getElementById("iVirV");
+				var iVirI = document.getElementById("iVirI");
+				var iVirR = document.getElementById("iVirR");
+
+				var ohms = document.getElementById("ohms");
+
+				var iVdIn = document.getElementById("iVdIn");
+				var iVdR1 = document.getElementById("iVdR1");
+				var iVdR2 = document.getElementById("iVdR2");
+				var iVdOut = document.getElementById("iVdOut");
+				var lEncodeVdR1 = document.getElementById("lEncodeVdR1");
+				var lEncodeVdR2 = document.getElementById("lEncodeVdR2");
+
+				function Init()
+				{
+					AddColours(iResistorBand1);
+					AddColours(iResistorBand2);
+					AddColours(iResistorBand3);
+					iResistorValue.value = 0;
+					ApplyColourBands();
+					CalculateVoltageDivider();
+					iResistorBand1.addEventListener("change", ApplyColourBands);
+					iResistorBand2.addEventListener("change", ApplyColourBands);
+					iResistorBand3.addEventListener("change", ApplyColourBands);
+
+					iResistorUnits.addEventListener("change", DecodeResistorValue);
+					iResistorValue.addEventListener("change", DecodeResistorValue);
+					iResistorValue.addEventListener("dblclick", ResetInputValue);
+
+					iVirV.addEventListener("change", CalculateVirV);
+					iVirV.addEventListener("dblclick", ResetInputValue);
+					iVirI.addEventListener("change", CalculateVirI);
+					iVirI.addEventListener("dblclick", ResetInputValue);
+					iVirR.addEventListener("change", CalculateVirR);
+					iVirR.addEventListener("dblclick", ResetInputValue);
+					iVirI.focus();
+
+					iHfeRb.addEventListener("change", CalculateHfeBaseResistor);
+					iHfeRb.addEventListener("dblclick", ResetInputValue);
+					iHfeRl.addEventListener("change", CalculateHfeBaseResistor);
+					iHfeRl.addEventListener("dblclick", ResetInputValue);
+					iHfe.addEventListener("change", CalculateHfeBaseResistor);
+					iHfe.addEventListener("dblclick", ResetInputValue);
+
+					lCopyToRl.addEventListener("click", lCopyToRl_Click);
+					lEncodeRb.addEventListener("click", lEncodeRb_Click);
+					lEncodeRl.addEventListener("click", lEncodeRl_Click);
+
+					iVdIn.addEventListener("change", iVdIn_Change);
+					iVdR1.addEventListener("change", iVdR1_Change);
+					iVdR2.addEventListener("change", iVdR2_Change);
+					iVdOut.addEventListener("change", iVdOut_Change);
+					lEncodeVdR1.addEventListener("click", lEncodeVdR1_Click);
+					lEncodeVdR2.addEventListener("click", lEncodeVdR2_Click);
+
+				}
+
+				function lEncodeRb_Click()
+				{
+					SetResistorValue(iHfeRb.value);
+					DecodeResistorValue();
+					return false;
+				}
+
+				function lEncodeRl_Click()
+				{
+					SetResistorValue(iHfeRl.value);
+					DecodeResistorValue();
+					return false;
+				}
+
+				function lCopyToRl_Click()
+				{
+					iHfeRl.value = iVirR.value;
+					iHfe.focus();
+					CalculateHfeBaseResistor();
+					return false;
+				}
+
+				function AddColours(element)
+				{
+					for (var i = 0; i < colourNames.length; i++)
+					{
+						let option = document.createElement("option");
+						option.value = i;
+						option.text = colourNames[i];
+						element.appendChild(option);
+					}
+					element.addEventListener("change", CalculateResistorValue);
+				}
+
+				function RefreshOhmsValue()
+				{
+					var val = iResistorValue.value;
+					if (iResistorUnits.selectedIndex === 1)
+					{
+						val *= 1000;
+					}
+					else if (iResistorUnits.selectedIndex === 2)
+					{
+						val *= 1000000;
+					}
+					ohms.innerText = val.toString();
+
+				}
+
+				function DecodeResistorValue()
+				{
+					var val = iResistorValue.value;
+					if (val < 0)
+					{
+						val = 0;
+					}
+					else if (val >= 1000000)
+					{
+						val = val / 1000000;
+						iResistorUnits.selectedIndex = 2;
+					}
+					else if (val >= 1000)
+					{
+						val = val / 1000;
+						iResistorUnits.selectedIndex = 1;
+					}
+					iResistorValue.value = val;
+
+					var units = parseInt(iResistorUnits.options[iResistorUnits.selectedIndex].value);
+					if (units > 1)
+					{
+						val *= units;
+					}
+					var valStr = val.toString();
+					var b1 = 0;
+					var b2 = 0;
+					var b3 = 0;
+					if (val < 10)
+					{
+						b2 = val;
+					}
+					else
+					{
+						b1 = parseInt(valStr[0]);
+						b2 = parseInt(valStr[1]);
+						b3 = valStr.length - 2;
+					}
+					iResistorBand1.selectedIndex = b1;
+					iResistorBand2.selectedIndex = b2;
+					iResistorBand3.selectedIndex = b3;
+					ApplyColourBands();
+				}
+
+				function SetResistorValue(val)
+				{
+					if (val >= 1000000)
+					{
+						val = val / 1000000;
+						iResistorUnits.selectedIndex = 2;
+					}
+					else if (val >= 1000)
+					{
+						val = val / 1000;
+						iResistorUnits.selectedIndex = 1;
+					}
+					else
+					{
+						iResistorUnits.selectedIndex = 0;
+					}
+					iResistorValue.value = val;
+					ApplyColourBands();
+				}
+
+				function CalculateResistorValue()
+				{
+					var val1 = parseInt(iResistorBand1.options[iResistorBand1.selectedIndex].value);
+					var val2 = parseInt(iResistorBand2.options[iResistorBand2.selectedIndex].value);
+					var val3 = parseInt(iResistorBand3.options[iResistorBand3.selectedIndex].value);
+					var val = (val1 * 10) + val2;
+
+					if (val3 > 0)
+					{
+						val = val * Math.pow(10, val3);
+					}
+					if (val >= 1000000)
+					{
+						val = val / 1000000;
+						iResistorUnits.selectedIndex = 2;
+					}
+					else if (val >= 1000)
+					{
+						val = val / 1000;
+						iResistorUnits.selectedIndex = 1;
+					}
+					else
+					{
+						iResistorUnits.selectedIndex = 0;
+					}
+					iResistorValue.value = val;
+				}
+
+				function ApplyColourBands()
+				{
+					var val1 = parseInt(iResistorBand1.options[iResistorBand1.selectedIndex].value);
+					var val2 = parseInt(iResistorBand2.options[iResistorBand2.selectedIndex].value);
+					var val3 = parseInt(iResistorBand3.options[iResistorBand3.selectedIndex].value);
+					resistorBand1.className = "resistorBand " + colourNames[val1].toLowerCase();
+					resistorBand2.className = "resistorBand " + colourNames[val2].toLowerCase();
+					resistorBand3.className = "resistorBand " + colourNames[val3].toLowerCase();
+					RefreshOhmsValue();
+				}
+
+				function CalculateHfeBaseResistor()
+				{
+					var loadResistance = parseInt(iHfeRl.value);
+					var hFEminimum = parseInt(iHfe.value);
+					if (!isNaN(loadResistance) && !isNaN(hFEminimum))
+					{
+						iHfeRb.value = Math.round(0.2 * loadResistance * hFEminimum);
+					}
+				}
+
+				function CalculateVirV()
+				{
+					iVirR.value = 0;
+					CalculateVir();
+				}
+
+				function CalculateVirI()
+				{
+					iVirR.value = 0;
+					CalculateVir();
+				}
+
+
+				function CalculateVirR()
+				{
+					iVirI.value = 0;
+					CalculateVir();
+				}
+
+				function CalculateVir()
+				{
+					var v = parseFloat(iVirV.value);
+					var i = parseInt(iVirI.value);
+					var r = parseInt(iVirR.value);
+
+					if (isNaN(v) || v < 0)
+					{
+						v = 0;
+					}
+					if (isNaN(r) || r < 0)
+					{
+						r = 0;
+					}
+					if (isNaN(i) || i < 0)
+					{
+						i = 0;
+					}
+					else
+					{
+						// Convert mA to A
+						i = i / 1000;
+					}
+					if (v === 0 && i > 0 && r > 0)
+					{
+						// V=IR
+						v = (i * r);
+						iVirV.value = v;
+					}
+					else if (i === 0 && v > 0 && r > 0)
+					{
+						// I=V/R
+						i = Math.round(1000 * (v / r));
+						iVirI.value = i;
+					}
+					else if (r === 0 && v > 0 && i > 0)
+					{
+						// R=V/I
+						r = Math.round(v / i);
+						iVirR.value = r;
+					}
+
+					if (r > 0)
+					{
+						SetResistorValue(r);
+						DecodeResistorValue();
+					}
+				}
+
+				function ResetInputValue(e)
+				{
+					var element = e.srcElement;
+					element.value = "";
+				}
+
+				function CalculateVoltageDivider()
+				{
+					var vin = parseFloat(iVdIn.value);
+					var r1 = parseInt(iVdR1.value);
+					var r2 = parseInt(iVdR2.value);
+					var vout = parseFloat(iVdOut.value);
+
+					if (vout <= 0)
+					{
+						iVdOut.value = (vin * (r2 / (r1 + r2))).toFixed(2);
+					}
+					else if (r1 <= 0)
+					{
+						iVdR1.value = Math.round(((r2 * vin) / vout) - r2);
+					}
+					else if (r2 <= 0)
+					{
+						iVdR2.value = Math.round(r1 * (1 / ((vin / vout) - 1)));
+					}
+				}
+
+				function iVdIn_Change()
+				{
+					iVdOut.value = 0;
+					CalculateVoltageDivider();
+				}
+
+				function iVdR1_Change()
+				{
+					iVdOut.value = 0;
+					CalculateVoltageDivider();
+				}
+
+				function iVdR2_Change()
+				{
+					iVdOut.value = 0;
+					CalculateVoltageDivider();
+				}
+
+				function iVdOut_Change()
+				{
+					iVdR2.value = 0;
+					CalculateVoltageDivider();
+				}
+
+				function lEncodeVdR1_Click()
+				{
+					SetResistorValue(iVdR1.value);
+					DecodeResistorValue();
+					return false;
+				}
+
+				function lEncodeVdR2_Click()
+				{
+					SetResistorValue(iVdR2.value);
+					DecodeResistorValue();
+					return false;
+				}
+				Init();
+			})();
+		</script>
+
+</body>
+</html>
