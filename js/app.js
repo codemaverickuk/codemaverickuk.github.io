@@ -45,7 +45,7 @@
 		_swipeY = -1;
 		_swipeTime = 0;
 		_zoomLevel = 0;
-		_timerInterval = 3500;
+		_timerInterval = 0;
 		_isMenuExpanded = false;
 		_isShuffleMode = false;
 		_isPreviewVisible = false;
@@ -224,6 +224,8 @@
 		togglePreview();
 		_isControlPanelVisible = false;
 		toggleControlPanel();
+		_isMenuExpanded = false;
+		toggleMenu();
 		setZoomLevel(0);
 	}
 
@@ -484,12 +486,18 @@
 		hide(_back);
 		hide(_forward);
 		show(_preview);
-		setTimerInterval(0);
 	}
 
 	function setTimerInterval(increment)
 	{
-		_timerInterval += increment;
+		if (_timerInterval <= 0)
+		{
+			_timerInterval = 3000;
+		}
+		else
+		{
+			_timerInterval += increment;
+		}
 		if (_timerInterval > 10000)
 		{
 			_timerInterval = 10000;
