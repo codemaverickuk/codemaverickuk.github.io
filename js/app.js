@@ -79,6 +79,7 @@
 
 	function spanClicked()
 	{
+		log("span click");
 		let oldApp = document.getElementById("_app");
 		document.body.removeChild(oldApp);
 		document.body.appendChild(createPreview());
@@ -440,13 +441,13 @@
 		{
 			_isPreviewVisible = false;
 			hide(_preview);
-			_menuPreview.textContent = "Preview: OFF";
+			_menuPreview.textContent = "Canvas: OFF";
 		}
 		else
 		{
 			_isPreviewVisible = true;
 			show(_preview);
-			_menuPreview.textContent = "Preview: ON";
+			_menuPreview.textContent = "Canvas: ON";
 		}
 	}
 
@@ -456,13 +457,13 @@
 		{
 			_isControlPanelVisible = false;
 			hide(_controlPanel);
-			_menuControlPanel.textContent = "Control Panel: OFF";
+			_menuControlPanel.textContent = "Controls: OFF";
 		}
 		else
 		{
 			_isControlPanelVisible = true;
 			show(_controlPanel);
-			_menuControlPanel.textContent = "Control Panel: ON";
+			_menuControlPanel.textContent = "Controls: ON";
 		}
 	}
 
