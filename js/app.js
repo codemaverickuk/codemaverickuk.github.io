@@ -227,7 +227,7 @@
 		_isMenuExpanded = true;
 		toggleMenu();
 		setZoomLevel(0);
-		_preview.src = null;
+		_preview.src = "";
 		_currentIndex = -1;
 		_selectedItem.textContent = "empty";
 	}
