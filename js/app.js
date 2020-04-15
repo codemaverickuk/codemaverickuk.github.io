@@ -228,7 +228,8 @@
 		toggleMenu();
 		setZoomLevel(0);
 		_preview.src = null;
-		_currentIndex = 0;
+		_currentIndex = -1;
+		_selectedItem.textContent = "";
 	}
 
 	function sortFiles()
@@ -364,7 +365,7 @@
 		})(file);
 		reader.readAsText(file);
 
-		_selectedItem.textContent = file.name;
+		_selectedItem.textContent = getFileNumber(file.name);
 		log(_currentIndex + " preview " + _sortOrder[_currentIndex] + " " + file.name +  " W:" + _preview.naturalWidth+  " H:" + _preview.naturalHeight);
 	}
 
