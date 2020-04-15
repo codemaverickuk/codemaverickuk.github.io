@@ -224,7 +224,7 @@
 		togglePreview();
 		_isControlPanelVisible = false;
 		toggleControlPanel();
-		_isMenuExpanded = false;
+		_isMenuExpanded = true;
 		toggleMenu();
 		setZoomLevel(0);
 	}
@@ -492,7 +492,7 @@
 	{
 		if (_timerInterval <= 0)
 		{
-			_timerInterval = 3000;
+			_timerInterval = 3500;
 		}
 		else
 		{
