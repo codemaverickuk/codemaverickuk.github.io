@@ -110,7 +110,7 @@
 		_menuPreview = document.createElement("span");
 		_menuPreview.addEventListener("click", togglePreview);
 		_menuPreview.className = "menu-item";
-		_menuPreview.textContent = Canvas: OFF";
+		_menuPreview.textContent = "Canvas: OFF";
 		_menu.appendChild(_menuPreview);
 
 		_menuControlPanel = document.createElement("span");
