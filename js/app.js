@@ -110,31 +110,31 @@
 		_menuPreview = document.createElement("span");
 		_menuPreview.addEventListener("click", togglePreview);
 		_menuPreview.className = "menu-item";
-		_menuPreview.textContent = "Preview: OFF";
+		_menuPreview.textContent = Canvas: OFF";
 		_menu.appendChild(_menuPreview);
 
 		_menuControlPanel = document.createElement("span");
 		_menuControlPanel.addEventListener("click", toggleControlPanel);
 		_menuControlPanel.className = "menu-item";
-		_menuControlPanel.textContent = "Control Panel: OFF";
+		_menuControlPanel.textContent = "Controls: OFF";
 		_menu.appendChild(_menuControlPanel);
 
 		_menuZoomIn = document.createElement("span");
 		_menuZoomIn.addEventListener("click", zoomIn);
 		_menuZoomIn.className = "menu-item";
-		_menuZoomIn.textContent = "Zoom +";
+		_menuZoomIn.textContent = "Z+";
 		_menu.appendChild(_menuZoomIn);
 
 		_menuZoomOut = document.createElement("span");
 		_menuZoomOut.addEventListener("click", zoomOut);
 		_menuZoomOut.className = "menu-item";
-		_menuZoomOut.textContent = "Zoom -";
+		_menuZoomOut.textContent = "Z-";
 		_menu.appendChild(_menuZoomOut);
 
 		_menuShuffle = document.createElement("span");
 		_menuShuffle.addEventListener("click", toggleShuffleMode);
 		_menuShuffle.className = "menu-item";
-		_menuShuffle.textContent = "Shuffle: OFF";
+		_menuShuffle.textContent = "Mix: OFF";
 		_menu.appendChild(_menuShuffle);
 
 		return _menu;
@@ -227,12 +227,13 @@
 		_isMenuExpanded = true;
 		toggleMenu();
 		setZoomLevel(0);
+		_preview.src = null;
+		_currentIndex = 0;
 	}
 
 	function sortFiles()
 	{
 		log("Sort");
-
 		_currentIndex = 0;
 		_sortOrder = [];
 		var lowest = 10000;
