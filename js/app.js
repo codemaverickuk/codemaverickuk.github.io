@@ -365,7 +365,7 @@
 		})(file);
 		reader.readAsText(file);
 
-		_selectedItem.textContent = getFileNumber(file);
+		_selectedItem.textContent = file.name.substr(0, file.name.length - 4);
 		log(_currentIndex + " preview " + _sortOrder[_currentIndex] + " " + file.name +  " W:" + _preview.naturalWidth+  " H:" + _preview.naturalHeight);
 	}
 
@@ -549,8 +549,8 @@
 
 	function keyPressed(key)
 	{
-		const arrowRight = 37;
-		const arrowLeft = 39;
+		const arrowLeft = 37;
+		const arrowRight = 39;
 		const escape = 27;
 		if (key.keyCode === arrowRight)
 		{
