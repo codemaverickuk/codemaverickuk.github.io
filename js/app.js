@@ -79,7 +79,6 @@
 
 	function spanClicked()
 	{
-		log("span click");
 		let oldApp = document.getElementById("_app");
 		document.body.removeChild(oldApp);
 		document.body.appendChild(createPreview());
