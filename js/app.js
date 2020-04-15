@@ -488,6 +488,7 @@
 		hide(_back);
 		hide(_forward);
 		show(_preview);
+		nextItem();
 		setTimerInterval(0);
 	}
 
