@@ -488,6 +488,7 @@
 		hide(_back);
 		hide(_forward);
 		show(_preview);
+		setTimerInterval(0);
 	}
 
 	function setTimerInterval(increment)
